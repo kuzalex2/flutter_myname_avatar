@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dog_repository/dog_repository.dart';
+import 'package:dog_api/dog_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_myname_avatar/widgets/widgets.dart';
+import 'package:nationalize_api/nationalize_api.dart';
 
 void main() {
   runApp(MyApp());
@@ -53,7 +56,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  final DogRepository repository = DogRepository();
+  final DogApiClient dogApiClient = DogApiClient();
+  final NationalizeApiClient nationalizeApiClient = NationalizeApiClient();
 
   void _incrementCounter() {
     setState(() {
@@ -100,23 +104,51 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            FutureBuilder<String>(
-              future: repository.dogPictureUrl(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return const Icon(Icons.error);
-                }
 
-                if (snapshot.data==null) {
-                  return const Loader();
-                }
 
-                return CachedNetworkImage(
-                  imageUrl: snapshot.data!,
-                  placeholder: (context, url) => const Loader(),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                );
-              }
+            FutureBuilder<NationalizeResponse>(
+                future: nationalizeApiClient.predict('alex'),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return const Icon(Icons.error);
+                  }
+
+                  if (snapshot.data==null) {
+                    return const Loader();
+                  }
+                  
+                  return Column(children:
+                  // [],
+                    snapshot.data!.countries.map((e) => Text('${e.country} ${(e.probability*100).round()} %')).toList()
+                  );
+
+              
+
+
+                }
+            ),
+
+            FutureBuilder<List<String>>(
+                future: dogApiClient.breed('hound'),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return const Icon(Icons.error);
+                  }
+
+                  if (snapshot.data==null) {
+                    return const Loader();
+                  }
+
+                  if (snapshot.data!.isEmpty){
+                    return const Icon(Icons.error);
+                  }
+
+                  return CachedNetworkImage(
+                    imageUrl: snapshot.data![Random().nextInt(snapshot.data!.length)],
+                    placeholder: (context, url) => const Loader(),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                  );
+                }
             ),
 
             const Text(

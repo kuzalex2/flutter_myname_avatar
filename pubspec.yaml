@@ -29,10 +29,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  dog_repository:
-    path: packages/dog_repository
-  nationalize_repository:
-    path: packages/nationalize_repository
+  dog_api:
+    path: packages/dog_api
+  nationalize_api:
+    path: packages/nationalize_api
   cached_network_image: ^3.2.1
 
   # The following adds the Cupertino Icons font to your application.
