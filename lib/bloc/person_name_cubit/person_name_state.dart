@@ -35,7 +35,8 @@ class NickName extends FormzInput<String, NickNameValidationError> {
   const NickName.pure([String value = '']) : super.pure(value);
   const NickName.dirty([String value = '']) : super.dirty(value);
 
-  static final RegExp _regExp =RegExp(r'^[a-zA-Z0-9_]{3,}$');
+  static const int minLength = 3;
+  static final RegExp _regExp = RegExp(r'^[a-zA-Z0-9_]{3,}$');
 
   @override
   NickNameValidationError? validator(String? value) {
