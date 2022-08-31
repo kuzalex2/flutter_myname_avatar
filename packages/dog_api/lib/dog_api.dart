@@ -27,10 +27,10 @@ class DogApiClient {
       connectTimeout: 5000,
       receiveTimeout: 3000,
     );
-  final Dio dio;
+  final Dio _dio;
 
-  DogApiClient():
-        dio = Dio(_options)
+  DogApiClient({Dio? dio}):
+        _dio = dio ?? Dio(_options)
   ;
 
 
@@ -41,7 +41,7 @@ class DogApiClient {
     final Response response;
 
     try {
-      response = await dio.request('/api/breed/$breed/images');
+      response = await _dio.request('/api/breed/$breed/images');
       debugPrint('$response');
     } on DioError catch (e) {
 

@@ -1,11 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dog_repository/dog_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_myname_avatar/widgets/widgets.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+
+  MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -49,6 +53,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  final DogRepository repository = DogRepository();
 
   void _incrementCounter() {
     setState(() {
@@ -95,6 +100,25 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            FutureBuilder<String>(
+              future: repository.dogPictureUrl(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return const Icon(Icons.error);
+                }
+
+                if (snapshot.data==null) {
+                  return const Loader();
+                }
+
+                return CachedNetworkImage(
+                  imageUrl: snapshot.data!,
+                  placeholder: (context, url) => const Loader(),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                );
+              }
+            ),
+
             const Text(
               'You have pushed the button this many times:',
             ),
