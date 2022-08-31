@@ -40,6 +40,7 @@ class DogApiClient {
   Future<List<String>> breed(String breed) async {
     final Response response;
 
+
     try {
       response = await _dio.request('/api/breed/$breed/images');
       debugPrint('$response');

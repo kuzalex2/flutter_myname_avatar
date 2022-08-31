@@ -34,6 +34,12 @@ dependencies:
   nationalize_api:
     path: packages/nationalize_api
   cached_network_image: ^3.2.1
+  octo_image: ^1.0.2
+  equatable: ^2.0.0
+  bloc: ^7.0.0
+  flutter_bloc: ^7.0.0
+
+  formz: ^0.4.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

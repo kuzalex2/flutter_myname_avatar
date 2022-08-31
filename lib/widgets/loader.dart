@@ -10,6 +10,7 @@ class Loader extends StatelessWidget {
 
   static const double smallRadius = 10.0;
   static const double mediumRadius = 14.0;
+  static const double largeRadius = 18.0;
 
   @override
   Widget build(BuildContext context) {
