@@ -201,7 +201,7 @@ class SearchResultWidget extends StatelessWidget {
 
           const SizedBox(width: 10,),
 
-          NationalityWidget(nationalizeResponse: nationalizeResponse),
+          Expanded(child: NationalityWidget(nationalizeResponse: nationalizeResponse)),
 
           const SizedBox(width: 10,),
 

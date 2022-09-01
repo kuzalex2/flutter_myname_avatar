@@ -88,8 +88,8 @@ class NationalizeApiClient {
 
       return NationalizeResponse(
         name: response.data["name"] ,
-        countries: list.map((element) => CountryProbability(country: element['country_id'], probability: element['probability'])).toList()
-        // countries: List<Map<String,dynamic>>.filled(100, {'country_id':'ru','probability':0.5}).map((element) => CountryProbability(country: element['country_id'], probability: element['probability'])).toList()
+        countries: list.map((element) => CountryProbability(countryCode: element['country_id'], probability: element['probability'])).toList()
+        // countries: List<Map<String,dynamic>>.filled(100, {'country_id':'rr','probability':0.5}).map((element) => CountryProbability(countryCode: element['country_id'], probability: element['probability'])).toList()
       );
 
     } else {

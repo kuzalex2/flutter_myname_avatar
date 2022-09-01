@@ -3,26 +3,26 @@
 import 'package:equatable/equatable.dart';
 
 class CountryProbability extends Equatable {
-  final String country;
+  final String countryCode;
   final double probability;
 
   const CountryProbability({
-    required this.country,
+    required this.countryCode,
     required this.probability,
 
   });
 
   ///
-  CountryProbability copyWith({String? country, double? probability}) {
+  CountryProbability copyWith({String? countryCode, double? probability}) {
     return CountryProbability(
-      country: country ?? this.country,
+      countryCode: countryCode ?? this.countryCode,
       probability: probability ?? this.probability,
     );
   }
 
 
   @override
-  List<Object?> get props => [country, probability];
+  List<Object?> get props => [countryCode, probability];
 }
 
 
