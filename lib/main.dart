@@ -72,11 +72,18 @@ class SearchScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Type your name please"),
       ),
-      body: Center(
-        child: Column(children: [
+      body: ListView(
+        children: [
+
           _InputField(),
-          const _SearchResults(),
-        ],),
+
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: _SearchResults(),
+          ),
+          const SizedBox(height:20,),
+          // Spacer(),
+        ],
       ),
     );
   }

@@ -2,7 +2,21 @@
 part of 'widgets.dart';
 
 
+///
+/// Display Name and list of nationality predictions or Progress or Error
+///
+///
 
+
+extension StringCasingExtension on String {
+  String toCapitalized() => length > 0 ?'${this[0].toUpperCase()}${substring(1).toLowerCase()}':'';
+}
+
+extension MaxListLength on List {
+  truncate(int end) {
+    return sublist(0,min(end, length));
+  }
+}
 
 class NationalityWidget extends StatelessWidget {
   final AsyncSnapshot<NationalizeResponse> nationalizeResponse;
@@ -22,9 +36,10 @@ class NationalityWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children:[
-      Text(nationalizeResponse.data!.name),
-      ...nationalizeResponse.data!.countries.map((e) => Text('${e.country} ${(e.probability*100).round()} %')).toList()
-    ]);
+        Text(nationalizeResponse.data!.name.toCapitalized()),
+        ...nationalizeResponse.data!.countries.map((e) => Text('${e.country} ${(e.probability*100).round()} %')).toList().truncate(5)
+      ]
+    );
 
 
   }
