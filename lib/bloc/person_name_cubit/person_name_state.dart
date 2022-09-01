@@ -5,29 +5,10 @@ part of 'person_name_cubit.dart';
 
 
 
-enum NickNameStatus {
-  localValid,
-  localInvalid,
-  serverChecking,
-  serverValid,
-  serverError,
-}
-
-extension NickNameStatusX on NickNameStatus {
-
-  bool get isServerValid => this == NickNameStatus.serverValid;
-
-  bool get isServerError => this == NickNameStatus.serverError;
-
-  bool get isServerChecking => this == NickNameStatus.serverChecking;
-
-  bool get isLocalInvalid => this == NickNameStatus.localInvalid ;
-
-  bool get isLocalValid => this == NickNameStatus.localValid;
-
-}
-
-
+///
+///
+/// Name validator - only r'^[a-zA-Z0-9_]{3,}$' is valid
+///
 
 enum NickNameValidationError { invalid }
 
@@ -47,23 +28,35 @@ class NickName extends FormzInput<String, NickNameValidationError> {
 }
 
 
-class AppException implements Exception {
 
-  final String message;
+enum NickNameStatus {
+  empty,
+  valid,
+  invalid,
+}
+extension NickNameStatusX on NickNameStatus {
 
+  bool get isEmpty => this == NickNameStatus.empty;
 
-  /// AppException
-  const AppException(String? message) :
-        message = message ?? ''
-  ;
+  bool get isValid => this == NickNameStatus.valid;
 
-  /// success - no error
-  const AppException.success()
-      :
-        message = ''
-  ;
+  bool get isInvalid => this == NickNameStatus.invalid;
 }
 
+
+enum SaveStatus {
+  no,
+  saving,
+  error,
+  saved
+}
+
+extension SaveStatusX on SaveStatus {
+
+  bool get isSaving => this == SaveStatus.saving;
+  bool get isSaved => this == SaveStatus.saved;
+
+}
 
 class PersonNameState extends Equatable {
 
@@ -71,74 +64,112 @@ class PersonNameState extends Equatable {
   ///
   final NickName nickName;
 
-  /// стаатус проверки nickName
-  final NickNameStatus checkStatus;
-
-  ///
+  /// checking status of Dog picture /wait/error/done
   final AsyncSnapshot<String> dogUrl;
 
-  ///
+  /// checking status of Nationality /wait/error/done
   final AsyncSnapshot<NationalizeResponse> nationalizeResponse;
 
-  /// статус сохранения nickName
-  // final FormzStatus saveStatus;
+
+  NickNameStatus get nickNameStatus {
+
+    if (nickName.value.length < NickName.minLength){
+      return NickNameStatus.empty;
+    }
+
+    return nickName.valid ? NickNameStatus.valid : NickNameStatus.invalid;
+  }
+
+  bool get isServerError {
+    return dogUrl.hasError || nationalizeResponse.hasError;
+  }
+
+  bool get hasResultForSave =>
+    !dogUrl.hasError && dogUrl.hasData && !nationalizeResponse.hasError && nationalizeResponse.hasData && nickNameStatus.isValid;
+
+  bool get canSave =>
+      hasResultForSave && !saveStatus.isSaving && !saveStatus.isSaved && nickNameStatus.isValid;
+
 
   ///
-  // final AppException saveError;
   ///
-  // final AppException checkError;
+
+  final SaveStatus saveStatus;
+
+  ///
+  ///
+  final String saveError;
+
+  ///
+  ///
+  final int saveId;
 
 
+  ///
+  ///
+  ///
 
-
+  final List<StoreRepositoryEntry> history;
 
   const PersonNameState._({
     required this.nickName,
-    required this.checkStatus,
     required this.dogUrl,
     required this.nationalizeResponse,
-    // required this.saveStatus,
-    // required this.saveError,
-    // required this.checkError,
+    required this.saveStatus,
+    required this.saveError,
+    required this.saveId,
+    required this.history,
   });
 
   factory PersonNameState(
       String? nickName,
       ){
     final _nickName = NickName.dirty(nickName ?? '');
+
     return PersonNameState._(
       nickName: _nickName,
-      checkStatus: _nickName.valid ? NickNameStatus.localValid : NickNameStatus.localInvalid,
       dogUrl: const AsyncSnapshot<String>.nothing(),
       nationalizeResponse: const AsyncSnapshot<NationalizeResponse>.nothing(),
-      // saveStatus: FormzStatus.pure,
-      // saveError: const AppException.success(),
-      // checkError: const AppException.success(),
+      saveStatus: SaveStatus.no,
+      saveError: "",
+      saveId: 0,
+      history: const [],
     );
   }
 
 
 
   @override
-  List<Object> get props => [nickName, checkStatus, dogUrl, nationalizeResponse,/* saveStatus, saveError*/];
+  List<Object> get props => [
+    nickName,
+    dogUrl,
+    nationalizeResponse,
+    saveStatus,
+    saveError,
+    saveId,
+    history,
+  ];
 
   PersonNameState copyWith({
     NickName? nickName,
-    NickNameStatus? checkStatus,
-    // FormzStatus? saveStatus,
-    // AppException? saveError,
-    // AppException? checkError,
+    SaveStatus? saveStatus,
+    String? saveError,
     AsyncSnapshot<String>? dogUrl,
     AsyncSnapshot<NationalizeResponse>? nationalizeResponse,
+    int? saveId,
+    List<StoreRepositoryEntry>? history,
+
+
 
   }) {
     return PersonNameState._(
       nickName: nickName ?? this.nickName,
-      checkStatus: checkStatus ?? this.checkStatus,
-      // saveStatus: saveStatus ?? this.saveStatus,
-      // saveError: saveError ?? this.saveError,
+      saveStatus: saveStatus ?? this.saveStatus,
+      saveError: saveError ?? this.saveError,
       dogUrl: dogUrl ?? this.dogUrl,
       nationalizeResponse: nationalizeResponse ?? this.nationalizeResponse,
+      saveId: saveId ?? this.saveId,
+      history: history ?? this.history,
     );
   }
 

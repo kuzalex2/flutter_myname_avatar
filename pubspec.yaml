@@ -38,6 +38,10 @@ dependencies:
   equatable: ^2.0.0
   bloc: ^7.0.0
   flutter_bloc: ^7.0.0
+  shared_preferences: ^2.0.6
+
+  rxdart: ^0.27.5
+
 
   formz: ^0.4.0
 

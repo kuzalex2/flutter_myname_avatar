@@ -44,6 +44,7 @@ class NationalizeApiClient {
   /// Predict the nationality of a name
   Future<NationalizeResponse> predict(String name) async {
 
+
     final Response response;
     try {
     // ?name=michael

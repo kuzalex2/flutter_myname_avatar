@@ -11,5 +11,6 @@ part 'loader.dart';
 part 'dog_image_widget.dart';
 part 'nationality_widget.dart';
 part 'app_input_field.dart';
+part 'search_result_widget.dart';
 
 
