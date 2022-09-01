@@ -1,19 +1,10 @@
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter_myname_avatar/repository/store_reposotory_model.dart';
 import 'package:nationalize_api/model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class StoreRepositoryEntry extends Equatable {
-  final String dogUrl;
-  final NationalizeResponse nationalizeResponse;
-
-  const StoreRepositoryEntry({required this.dogUrl, required  this.nationalizeResponse});
-
-  @override
-  List<Object?> get props => [dogUrl, nationalizeResponse];
-
-}
 
 class StoreRepository {
 

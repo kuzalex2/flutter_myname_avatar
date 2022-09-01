@@ -9,6 +9,7 @@ import 'package:formz/formz.dart';
 import 'package:nationalize_api/model.dart';
 
 import '../../repository/repository.dart';
+import '../../repository/store_reposotory_model.dart';
 
 part 'person_name_state.dart';
 

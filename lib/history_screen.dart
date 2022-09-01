@@ -2,7 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_myname_avatar/repository/store_repository.dart';
+import 'package:flutter_myname_avatar/repository/store_reposotory_model.dart';
 import 'package:flutter_myname_avatar/widgets/widgets.dart';
 import 'package:nationalize_api/model.dart';
 

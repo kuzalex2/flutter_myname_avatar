@@ -1,7 +1,15 @@
 
 
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+
+part 'model.g.dart';
+
+// flutter pub run build_runner build --delete-conflicting-outputs
+
+
+@JsonSerializable()
 class CountryProbability extends Equatable {
   final String countryCode;
   final double probability;
@@ -23,10 +31,15 @@ class CountryProbability extends Equatable {
 
   @override
   List<Object?> get props => [countryCode, probability];
+
+
+  factory CountryProbability.fromJson(Map<String, dynamic> json) => _$CountryProbabilityFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CountryProbabilityToJson(this);
 }
 
 
-
+@JsonSerializable()
 class NationalizeResponse extends Equatable {
   final String name;
   final List<CountryProbability> countries;
@@ -44,6 +57,10 @@ class NationalizeResponse extends Equatable {
     );
   }
 
+
+  factory NationalizeResponse.fromJson(Map<String, dynamic> json) => _$NationalizeResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NationalizeResponseToJson(this);
 
   @override
   List<Object?> get props => [name, countries];
