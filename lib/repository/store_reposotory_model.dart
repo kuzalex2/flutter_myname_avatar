@@ -26,3 +26,20 @@ class StoreRepositoryEntry extends Equatable {
   Map<String, dynamic> toJson() => _$StoreRepositoryEntryToJson(this);
 
 }
+
+
+@JsonSerializable()
+class StoreRepositoryList extends Equatable {
+  final List<StoreRepositoryEntry> list;
+
+  const StoreRepositoryList({required this.list});
+
+  @override
+  List<Object?> get props => [list];
+
+
+  factory StoreRepositoryList.fromJson(Map<String, dynamic> json) => _$StoreRepositoryListFromJson(json);
+
+  Map<String, dynamic> toJson() => _$StoreRepositoryListToJson(this);
+
+}

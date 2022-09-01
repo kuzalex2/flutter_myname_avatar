@@ -1,10 +1,14 @@
 
-import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_myname_avatar/repository/store_reposotory_model.dart';
-import 'package:nationalize_api/model.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+
+abstract class ISaveLoad {
+  Future<void> save(String key, Map<String, dynamic> data) ;
+
+  Future<Map<String, dynamic>?> load(String key);
+}
 
 class StoreRepository {
 
@@ -12,21 +16,39 @@ class StoreRepository {
   // static const int maxHistory = 2;
   static const int maxHistory = 10;
 
+  final ISaveLoad db;
+  List<StoreRepositoryEntry> _dataList = [];
 
-  late final SharedPreferences _prefs;
+
+  StoreRepository({required this.db})
+  ;
+
+
+
+
 
   BehaviorSubject<List<StoreRepositoryEntry>>? __stateController;
   BehaviorSubject<List<StoreRepositoryEntry>> get _stateController {
     return __stateController ??= BehaviorSubject<List<StoreRepositoryEntry>>();
   }
-
-  List<StoreRepositoryEntry> _dataList = [];
   Stream<List<StoreRepositoryEntry>> get stream =>  _stateController.stream;
 
 
+
   init() async {
-    _prefs = await SharedPreferences.getInstance();
     await Future.delayed(const Duration(seconds: 1));
+
+    try {
+      final saved = await db.load("history");
+      if (saved!=null) {
+        final parsed = StoreRepositoryList.fromJson(saved);
+        _dataList = parsed.list;
+      }
+    } catch (e) {
+      debugPrint('$e');
+    }
+
+
     // _dataList = [
     //   const StoreRepositoryEntry(dogUrl: "", nationalizeResponse: NationalizeResponse(name: 'name', countries: [CountryProbability(countryCode: 'ru', probability: .9)]))
     // ];
@@ -45,6 +67,13 @@ class StoreRepository {
       _dataList.removeAt(0);
     }
     _stateController.add(_dataList);
+
+    try {
+      await db.save("history", StoreRepositoryList(list: _dataList).toJson());
+    } catch (e) {
+      debugPrint('$e');
+      rethrow;
+    }
   }
 
 
