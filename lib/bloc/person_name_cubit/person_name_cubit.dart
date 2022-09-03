@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
@@ -22,10 +23,12 @@ part 'person_name_state.dart';
 class PersonNameCubit extends Cubit<PersonNameState> {
 
 
+  StreamSubscription? _subs;
+
   PersonNameCubit(this.repository, {required String nickName}) :
         super(PersonNameState(nickName),)
   {
-    repository.storeRepository.stream.listen((history) {
+    _subs=repository.storeRepository.stream.listen((history) {
       emit(state.copyWith(history: List.of(history)));
     });
     if (state.nickNameStatus.isValid){
@@ -33,6 +36,12 @@ class PersonNameCubit extends Cubit<PersonNameState> {
 
       _serverCheck(nickName);
     }
+  }
+
+  @override
+  close() async {
+    _subs?.cancel();
+    super.close();
   }
 
 
