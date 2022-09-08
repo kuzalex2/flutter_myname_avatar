@@ -33,4 +33,5 @@
 * Be satisfied with the result and don't forget to have fun!
 
 ![result image](doc/screencast.gif)
+<img src="doc/screencast.gif" width="128"/>
 
