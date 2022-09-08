@@ -31,3 +31,6 @@
 * Extract everything that can be considered reusable
 * Compose the UI ergonomically
 * Be satisfied with the result and don't forget to have fun!
+
+![result image](doc/screencast.gif)
+
